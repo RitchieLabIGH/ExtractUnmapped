@@ -8,6 +8,7 @@ usage()
     echo -e "\nusage: \n\tpreprocess.sh -i input_file -o output_dir -k kmer_length [-K][-h][-t int][-r int][q][-m int][-c int][-h]\n"
     echo -e "\t-i|--input-file STR\t A tab separated value file containing in the first column the sample name, \n\t\t\t\t in the second the group and in the third the file location. \n\t\t\t\t This last can be local, http, ftp or SRR/ERR.\n\t\t\t\t If list, it has to be column (;) separated"
     echo -e "\n\t-o|--output-dir STR\t The output directory. If doesn't exists, it will be created. Default \"./preprocess/\""
+    echo -e "\n\t-ol|--output-list STR\t A file to create the final matrix. Default \"./create_matrix.tsv\""
     echo -e "\n\t-f|--sam-flag STR\t The flags to use to extract the unmapped reads. "
     echo -e "\n\t-m|--min-counts INT\t Don't consider k-mer present less than the given threshold. Default 5"    
     echo -e "\n\t-c|--counter-val INT\t Kmc counter value. Suggest to keep the default 4294967295, that is also the maximum available."    
@@ -158,15 +159,6 @@ while read line; do
             cd ./fastq
             run_till_success wget ${f} -O $fname -q 
             f=$(realpath ./${fname})
-            cd ..
-            downloaded="T"
-        elif [[ "${f}" =~ ^[SE]RR[0-9]{7}$ ]]; then
-            echo "###[MESSAGE][$(date +%y-%m-%d-%H:%M:%S)] DOWNLOADING ${fname}"
-            mkdir -p ./fastq
-            cd ./fastq
-            vdb-config --set /repository/user/cache-disabled=true
-            run_till_success fastq-dump --skip-technical --clip --dumpbase --split-3 ${f}
-            f=$(realpath ./${f}*.fastq )
             cd ..
             downloaded="T"
         else  
