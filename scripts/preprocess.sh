@@ -215,8 +215,7 @@ while read line; do
     echo "###[MESSAGE][$(date +%y-%m-%d-%H:%M:%S)] sorting the text file"    
 	sort -k1 --parallel=${threads} ./tmp_dir/tmp.txt | awk '{print $1 "\t" $2}' > ./${s_name}.tsv
 	count_file=$(realpath ./${s_name}.tsv)
-	tot_count=$(awk 'BEGIN {t_c=0} {t_c=t_c + $2;} END {print t_c}' ${count_file})
-    echo -e "${count_file}\t${s_name}\t${s_class}\t${tot_count}" > ./tmp_dir/kma.input	
+    echo -e "${count_file}\t${s_name}\t${s_class}" > ./tmp_dir/kma.input	
     cat ./tmp_dir/kma.input >> $matrix_file
     if [[ "${keepFiles}" == "F" ]]; then
         rm -fr ./fasta ./fastq
